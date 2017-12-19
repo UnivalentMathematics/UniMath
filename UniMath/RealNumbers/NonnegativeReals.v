@@ -5,6 +5,7 @@ Require Import UniMath.MoreFoundations.Tactics.
 
 Require Import UniMath.RealNumbers.Sets.
 Require Export UniMath.Algebra.ConstructiveStructures.
+Require Import UniMath.Algebra.Lattice.
 Require Import UniMath.RealNumbers.Prelim.
 Require Import UniMath.RealNumbers.NonnegativeRationals.
 
@@ -236,7 +237,7 @@ Qed.
 
 Lemma isstpo_Dcuts_lt_rel : isStrongOrder Dcuts_lt_rel.
 Proof.
-  repeat split.
+  mkStrongOrder.
   exact istrans_Dcuts_lt_rel.
   exact iscotrans_Dcuts_lt_rel.
   exact isirrefl_Dcuts_lt_rel.

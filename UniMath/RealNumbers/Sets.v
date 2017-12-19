@@ -7,7 +7,8 @@ Require Import UniMath.MoreFoundations.Tactics.
 Require Export UniMath.Foundations.Sets
                UniMath.Ktheory.QuotientSet.
 Require Import UniMath.Algebra.BinaryOperations
-               UniMath.Algebra.Apartness.
+               UniMath.Algebra.Apartness
+               UniMath.Algebra.Lattice.
 
 Unset Automatic Introduction.
 
@@ -47,39 +48,6 @@ Definition isrefl_po : isrefl R :=
   pr2 (pr2 R).
 
 End po_pty.
-
-(** ** Strong Order *)
-
-Definition isStrongOrder {X : UU} (R : hrel X) := istrans R × iscotrans R × isirrefl R.
-Definition StrongOrder (X : UU) := ∑ R : hrel X, isStrongOrder R.
-Definition pairStrongOrder {X : UU} (R : hrel X) (is : isStrongOrder R) : StrongOrder X :=
-  tpair (λ R : hrel X, isStrongOrder R ) R is.
-Definition pr1StrongOrder {X : UU} : StrongOrder X → hrel X := pr1.
-Coercion  pr1StrongOrder : StrongOrder >-> hrel.
-
-Section so_pty.
-
-Context {X : UU}.
-Context (R : StrongOrder X).
-
-Definition istrans_StrongOrder : istrans R :=
-  pr1 (pr2 R).
-Definition iscotrans_StrongOrder : iscotrans R :=
-  pr1 (pr2 (pr2 R)).
-Definition isirrefl_StrongOrder : isirrefl R :=
-  pr2 (pr2 (pr2 R)).
-
-End so_pty.
-
-Definition isStrongOrder_quotrel {X : UU} {R : eqrel X} {L : hrel X} (is : iscomprelrel R L) :
-  isStrongOrder L → isStrongOrder (quotrel is).
-Proof.
-  intros X R L is H.
-  repeat split.
-  - apply istransquotrel, (pr1 H).
-  - apply iscotransquotrel, (pr1 (pr2 H)).
-  - apply isirreflquotrel, (pr2 (pr2 H)).
-Defined.
 
 (** ** Reverse orderse *)
 (** or how easily define ge x y := le x y *)
@@ -158,10 +126,10 @@ Lemma isStrongOrder_reverse {X : UU} (l : hrel X) :
   isStrongOrder l → isStrongOrder (hrel_reverse l).
 Proof.
   intros X l H.
-  repeat split.
-  now apply istrans_reverse, (pr1 H).
-  now apply iscotrans_reverse, (pr1 (pr2 H)).
-  now apply isirrefl_reverse, (pr2 (pr2 H)).
+  mkStrongOrder.
+  - apply istrans_reverse, (istrans_StrongOrder (_,,H)).
+  - apply iscotrans_reverse,(iscotrans_StrongOrder (_,,H)).
+  - apply isirrefl_reverse, (isirrefl_StrongOrder (_,,H)).
 Qed.
 Definition StrongOrder_reverse {X : UU} (l : StrongOrder X) :=
   pairStrongOrder (hrel_reverse l) (isStrongOrder_reverse l (pr2 l)).

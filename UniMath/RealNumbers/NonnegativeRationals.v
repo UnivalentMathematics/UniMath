@@ -9,6 +9,7 @@ Require Import UniMath.MoreFoundations.Tactics.
 Require Import UniMath.RealNumbers.Sets.
 Require Import UniMath.RealNumbers.Fields.
 Require Export UniMath.Algebra.DivisionRig.
+Require Import UniMath.Algebra.Lattice.
 Require Import UniMath.RealNumbers.Prelim.
 
 Opaque hq.
@@ -72,7 +73,7 @@ Qed.
 Local Definition hnnq_lt : hrel hnnq_set := resrel hqlth (hqleh 0).
 Local Lemma isStrongOrder_hnnq_lt : isStrongOrder hnnq_lt.
 Proof.
-  repeat split.
+  mkStrongOrder.
   - intros x y z.
     now apply istranshqlth.
   - intros x y z Hxz.
@@ -91,13 +92,13 @@ Local Definition hnnq_gt : hrel hnnq_set := resrel hqgth (hqleh 0).
 Local Lemma isStrongOrder_hnnq_gt : isStrongOrder hnnq_gt.
 Proof.
   set (H := isStrongOrder_reverse _ isStrongOrder_hnnq_lt).
-  repeat split.
-  intros x y z.
-  now apply (pr1 H).
-  intros x y z.
-  now apply (pr1 (pr2 H)).
-  intros x.
-  now apply (pr2 (pr2 H)).
+  mkStrongOrder.
+  - intros x y z.
+    apply (istrans_isStrongOrder H).
+  - intros x y z.
+    apply (iscotrans_isStrongOrder H).
+  - intros x.
+    apply (isirrefl_isStrongOrder H).
 Qed.
 
 Local Lemma isEffectiveOrder_hnnq : isEffectiveOrder hnnq_le hnnq_lt.

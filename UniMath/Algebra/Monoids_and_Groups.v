@@ -32,6 +32,7 @@
   - Quotient objects
   - Cosets
   - Direct products
+  - Group of invertible elements in a monoid
  - Abelian groups
   - Basic definitions
   - Univalence for abelian groups
@@ -460,7 +461,38 @@ Proof.
 Defined.
 
 Definition submonoid_incl {X : monoid} (A : submonoid X) : monoidfun A X :=
-monoidfunconstr (ismonoidfun_pr1 A).
+  monoidfunconstr (ismonoidfun_pr1 A).
+
+(** Every monoid has a submonoid which is a group, the collection of elements
+    with inverses. This is used to construct the automorphism group from the
+    endomorphism monoid, for instance. *)
+Local Open Scope multmonoid.
+
+Definition invertible_submonoid (X : monoid) : @submonoid X.
+Proof.
+  refine (merely_invertible_elements (@op X) (pr2 X),, _).
+  split.
+  (** This is a similar statement to [grinvop] *)
+  - intros xpair ypair.
+    apply mere_invop.
+    + exact (pr2 xpair).
+    + exact (pr2 ypair).
+  - apply hinhpr; exact (1,, dirprodpair (lunax _ 1) (lunax _ 1)).
+Defined.
+
+(** This submonoid is closed under inversion *)
+Lemma inverse_in_submonoid (X : monoid) :
+  ∏ (x x0 : X), merely_invertible_elements (@op X) (pr2 X) x ->
+                isinvel (@op X) (pr2 X) x x0 ->
+                merely_invertible_elements (@op X) (pr2 X) x0.
+Proof.
+  intros x x0 _ x0isxinv.
+  unfold merely_invertible_elements, hasinv.
+  apply hinhpr.
+  exact (x,, is_inv_inv (@op X) _ _ _ x0isxinv).
+Defined.
+
+Local Close Scope multmonoid.
 
 (** **** Kernels *)
 
@@ -2277,6 +2309,39 @@ Defined.
 Definition grdirprod (X Y : gr) : gr.
 Proof. split with (setwithbinopdirprod X Y). apply isgrdirprod. Defined.
 
+(** **** Group of invertible elements in a monoid *)
+
+Local Open Scope multmonoid.
+
+Definition invertible_submonoid_grop X : isgrop (@op (invertible_submonoid X)).
+Proof.
+  pose (submon := invertible_submonoid X).
+  pose (submon_carrier := ismonoidcarrier submon).
+
+  (** We know that if each element has an inverse, it's a grop *)
+  apply (isgropif submon_carrier).
+
+  intros xpair.
+  pose (x := pr1 xpair).
+  pose (unel := (unel_is submon_carrier)).
+
+  (** We can use other hProps when proving an hProp (assume it has an inverse) *)
+  apply (squash_to_prop (pr2 xpair) (propproperty _)).
+
+  intros xinv.
+  unfold haslinv.
+  apply hinhpr.
+  refine ((pr1 xinv,, inverse_in_submonoid _ x (pr1 xinv) (pr2 xpair) (pr2 xinv)),, _).
+  apply subtypeEquality_prop.
+  exact (pr2 (pr2 xinv)).
+Defined.
+
+Local Close Scope multmonoid.
+
+Definition gr_merely_invertible_elements : monoid -> gr :=
+  fun X => (carrierofasubsetwithbinop
+             (submonoidtosubsetswithbinop
+                _ (invertible_submonoid X)),, invertible_submonoid_grop X).
 
 (** *** Abelian groups *)
 

@@ -25,6 +25,7 @@
   - Subobjects
   - Quotient objects
   - Direct products
+ - Infinitary operations
 *)
 
 
@@ -2685,5 +2686,24 @@ Proof.
            (λ xy xy' : dirprod X Y, make_dirprod (op2 (pr1 xy) (pr1 xy'))
                                                  (op2 (pr2 xy) (pr2 xy')))).
 Defined.
+
+
+(** ** Infinitary operations *)
+
+(** Limit a more general infinitary operation to a binary operation *)
+
+Lemma infinitary_op_to_binop {X : hSet} (op : ∏ I : UU, (I -> X) -> X) : binop X.
+Proof.
+  intros x y; exact (op _ (bool_rect (fun _ => X) x y)).
+Defined.
+
+(** TODO: How to prove this? Is it true? *)
+Lemma isassoc_infinitary_op_to_binop
+      {X : hSet} (op : ∏ I : UU, (I -> X) -> X) :
+  isassoc (infinitary_op_to_binop op).
+Proof.
+  intros x y z.
+  unfold infinitary_op_to_binop.
+Abort.
 
 (* End of file *)

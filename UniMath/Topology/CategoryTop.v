@@ -17,7 +17,7 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Core.
 (** * Displayed category of topological spaces *)
 
 
-Definition top_disp_cat_ob_mor : disp_cat_ob_mor HSET.
+Definition top_disp_cat_ob_mor : disp_precat_ob_mor HSET.
 Proof.
   use tpair.
   - intro X. exact (isTopologicalSet (pr1hSet X)).
@@ -25,7 +25,7 @@ Proof.
     apply (@continuous (pr1hSet X,,T) (pr1hSet Y,,U) f).
 Defined.
 
-Definition top_disp_cat_data : disp_cat_data HSET.
+Definition top_disp_cat_data : disp_precat_data HSET.
 Proof.
   exists top_disp_cat_ob_mor.
   use tpair.
@@ -44,4 +44,4 @@ Proof.
   apply isasetaprop. apply isaprop_continuous.
 Defined.
 
-Definition disp_top : disp_cat SET := _ ,, top_disp_cat_axioms.
+Definition disp_top : disp_cat SET := make_disp_cat top_disp_cat_axioms.

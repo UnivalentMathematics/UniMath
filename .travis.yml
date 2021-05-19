@@ -22,6 +22,7 @@ env:
     - PACKAGES=Tactics BUILD_COQIDE=yes
     - PACKAGES=Folds
     - PACKAGES=Induction
+    - PACKAGES=Books
     - PACKAGES="Foundations Combinatorics Algebra NumberSystems" COQ_BRANCH=master
 
 # The docker image we formerly used is hosted at https://hub.docker.com/r/palmskog/xenial-unimath, and was created for us by Karl Palmskog.

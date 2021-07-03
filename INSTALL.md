@@ -15,18 +15,34 @@ and under [Arch/Manjaro Linux](#preparing-for-the-installation-under-arch-linux-
 
 ### Preparing for the installation under Mac OS X
 
-NB: The method explained below is recommended for beginners.
-A more flexible, but complex, installation method is given in [INSTALL\_OPAM.md](./INSTALL_OPAM.md).
+NB: The following is a recommended simple approach.
+For more customisation of your installation, see [INSTALL\_OPAM.md](./INSTALL_OPAM.md).
 
-1. Install "Homebrew", available from http://brew.sh/.
-2. Using Homebrew, install ocaml with the following command:
+1. Install OCaml and required libraries, using your preferred package manager.  E.g. using Homebrew (http://brew.sh/), issue the command:
 ```bash
-$ brew install objective-caml ocaml-num camlp5 bash ocaml-findlib
+$ brew install ocaml opam ocaml-num ocaml-findlib
 ```
-3. Install Emacs from https://emacsformacosx.com/.
-  
-Now proceed with [Installation of ProofGeneral](#installation-of-proofgeneral-all-operating-systems) and [Installing UniMath](#installing-unimath) below.
+2. If later in the installation you get a message asking for a specific OCaml version, and/or installing extra packages, you can do this with:
+```bash
+$ opam init
+$ eval $(opam env)
+$ opam switch create 4.11.0
+$ opam install num ocamlfind
+```
+This should prepare your system for [Installing UniMath](#installing-unimath) below.
 
+You will also need an editor.  There are several options:
+
+1. We recommend Emacs with Proof General.  A classic Emacs can be installed from https://emacsformacosx.com/; alternatively, Aquamacs (https://aquamacs.org) provides a slightly more native interface, with standard Mac OS keybindings.  Instructions for [installation of Proof General](#installation-of-proofgeneral-all-operating-systems) are below.  
+
+2. A popular newer option is Visual Studio Code, available from https://code.visualstudio.com, with the VSCoq extension.
+
+3. Alternatively, you can use Coq’s own CoqIDE.  For this you will need LablGtk3 and LablGtkSourceView3; these can be installed with:
+```bash
+$ brew install lablgtk gtksourceview3
+$ opam install lablgtk3 lablgtk-sourceview3
+```
+With those installed, follow the instructions in [INSTALL\_COQIDE.md](./INSTALL_COQIDE.md).
 
 ### Preparing for the installation under Ubuntu or Debian (Linux)
 
@@ -36,7 +52,7 @@ following shell command.
 ```bash
  sudo apt-get install build-essential git ocaml ocaml-nox ocaml-native-compilers camlp5 libgtk2.0 libgtksourceview2.0 liblablgtk-extras-ocaml-dev ocaml-findlib libnum-ocaml-dev emacs
 ```
-Now proceed with [Installation of ProofGeneral](#installation-of-proofgeneral-all-operating-systems) and [Installing UniMath](#installing-unimath) below.
+Now proceed with [Installation of Proof General](#installation-of-proofgeneral-all-operating-systems) and [Installing UniMath](#installing-unimath) below.
 
 ### Preparing for the installation under Arch Linux or Manjaro Linux
 
@@ -49,12 +65,13 @@ shell commands.
  sudo pacman --sync --needed ocaml camlp5 ocaml-findlib ocaml-num
  sudo pacman -S emacs
 ```
-Now proceed with [Installation of ProofGeneral](#installation-of-proofgeneral-all-operating-systems) and [Installing UniMath](#installing-unimath) below.
-## Installation of ProofGeneral (all operating systems)
+Now proceed with [Installation of Proof General](#installation-of-proofgeneral-all-operating-systems) and [Installing UniMath](#installing-unimath) below.
 
-You may obtain ProofGeneral from by using the quick installation instructions
+## Installation of Proof General (all operating systems)
+
+You may obtain Proof General from by using the quick installation instructions
 at http://proofgeneral.inf.ed.ac.uk/ or at https://proofgeneral.github.io/.
-Your version of emacs determines which version of ProofGeneral you need,
+Your version of emacs determines which version of Proof General you need,
 roughly, so some experimentation may be required; you may even need the current
 development version if your emacs is recent.
 
@@ -65,13 +82,13 @@ started.
 
 Finally, `RET` means "press Enter".
 
-Hence, the first ProofGeneral installation instruction
+Hence, the first Proof General installation instruction
 ```
 M-x package-refresh-contents RET
 ```
 reads "hold Alt, press x; type package-refresh-contents; press Enter".
 
-Optional: some useful ProofGeneral add-ons are available for installation at
+Optional: some useful Proof General add-ons are available for installation at
 https://github.com/cpitclaudel/company-coq/.
 
 ## Installing UniMath
@@ -209,7 +226,7 @@ The correct version of Coq is built and used automatically by the command
 then follow the instructions in the file build/Makefile-configuration-template.)
 
 The file ```UniMath/.dir-locals.el``` contains code that arranges for
-ProofGeneral to use the Coq programs built by ```make``` when one of the proof
+Proof General to use the Coq programs built by ```make``` when one of the proof
 files of UniMath is opened in emacs; in order to use them more generally, such
 as from the command line,, then add the full path for the directory
 ```./sub/coq/bin``` to your ```PATH``` environment variable, or set the emacs
@@ -219,7 +236,7 @@ The various *.v files are compiled by Coq in such a way that the fully
 qualified name of each identifier begins with UniMath.  For example, the fully
 qualified name of ```maponpaths``` in uu0.v is ```UniMath.Foundations.Basics.PartA.maponpaths```.
 
-The preferred way to interact with the Coq code is with ProofGeneral, running
+The preferred way to interact with the Coq code is with Proof General, running
 in a modern version of emacs.  The file UniMath/.dir-locals.el will set the
 emacs variable ```coq-prog-args``` appropriately.  In particular, it will add the
 directory UniMath to the path, using the ```-R``` option, and it will arrange for

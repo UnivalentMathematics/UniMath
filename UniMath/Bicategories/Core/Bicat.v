@@ -798,16 +798,31 @@ Proof.
   use lhs_left_invert_cell.
   apply is_invertible_2cell_rassociator.
   apply hcomp_lassoc.
-Defined.
+Qed.
+
+
+Lemma hcomp_identity_left {a b c : C} (f : C ⟦ a, b ⟧)(g1 g2 : C ⟦ b, c ⟧) (y : g1 ==> g2)
+  : id2 f ⋆ y = lwhisker f y.
+Proof.
+  unfold hcomp.
+  rewrite id2_rwhisker.
+  apply id2_left.
+Qed.
+
+Lemma hcomp_identity_right {a b c : C} (f1 f2 : C ⟦ a, b ⟧)(g : C ⟦ b, c ⟧) (x : f1 ==> f2)
+  : x ⋆ id2 g = rwhisker g x.
+Proof.
+  unfold hcomp.
+  rewrite lwhisker_id2.
+  apply id2_right.
+Qed.
 
 Lemma hcomp_identity {a b c : C} (f1 : C ⟦ a, b ⟧) (f2 : C ⟦ b, c ⟧)
   : id2 f1 ⋆ id2 f2 = id2 (f1 · f2).
 Proof.
-  unfold hcomp.
-  rewrite id2_rwhisker.
-  rewrite id2_left.
+  rewrite hcomp_identity_left.
   apply lwhisker_id2.
-Defined.
+Qed.
 
 
 (* ----------------------------------------------------------------------------------- *)
